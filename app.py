@@ -27,7 +27,7 @@ def gemini_proxy():
         if json_mode:
             generation_config["response_mime_type"] = "application/json"
 
-        model = genai.GenerativeModel('gemini-2.5-flash', generation_config=generation_config)
+        model = genai.GenerativeModel('gemini-3.8-flash', generation_config=generation_config)
 
         # 整理傳入的內容（包含圖片與文字）
         content_parts = [prompt]
