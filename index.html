@@ -3,11 +3,11 @@
 <title>AIDC 生態保費試算 (Flask 安全後端版)</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f0f4f9;--card:#fff;--ink:#102a43;--mut:#486581;--seg:#e1ecf4;--line:#bcccdc;--blk:#102a43;--org:#e8702a;--grn:#34a853;--blu:#2f6fde;--red:#d4301f;--yel:#c98a14;
+:root{--bg:#f4f4f6;--card:#fff;--ink:#1d1d1f;--mut:#6e6e73;--seg:#efeff1;--line:#e5e5e8;--blk:#000;--org:#e8702a;--grn:#34a853;--blu:#2f6fde;--red:#d4301f;--yel:#c98a14;
 padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}
 :root:not([data-theme=light]){color-scheme:light dark}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b192c;--card:#1e3e62;--ink:#f0f4f9;--mut:#8da4c4;--seg:#162b40;--line:#2a4d69;--blk:#0b192c}}
-:root[data-theme=dark]{--bg:#0b192c;--card:#1e3e62;--ink:#f0f4f9;--mut:#8da4c4;--seg:#162b40;--line:#2a4d69;--blk:#0b192c}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#111113;--card:#1c1c1e;--ink:#f5f5f7;--mut:#98989d;--seg:#2c2c2e;--line:#2c2c2e;--blk:#000}}
+:root[data-theme=dark]{--bg:#111113;--card:#1c1c1e;--ink:#f5f5f7;--mut:#98989d;--seg:#2c2c2e;--line:#2c2c2e;--blk:#000}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"SF Pro Text","Noto Sans TC",sans-serif;font-size:14px}
 .w{max-width:1040px;margin:auto;padding:28px 16px 60px}
@@ -16,7 +16,7 @@ h1{font-size:clamp(30px,6vw,56px);text-align:center;margin:10px 0 4px;font-weigh
 h2{font-size:clamp(24px,4.5vw,38px);text-align:center;margin:36px 0 6px;font-weight:800}
 .tabs{display:flex;gap:2px;background:var(--card);border-radius:30px;padding:6px;width:max-content;max-width:100%;margin:0 auto 22px;overflow-x:auto;box-shadow:0 4px 18px #0001}
 .tabs button{border:0;background:none;color:var(--ink);padding:11px 22px;border-radius:24px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
-.tabs button.on{background:#2f6fde;color:#fff}
+.tabs button.on{background:#1d1d1f;color:#fff}
 .g{display:grid;gap:14px}.g4{grid-template-columns:repeat(4,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
 @media(max-width:760px){.g4,.g2{grid-template-columns:1fr 1fr}.g2.stack{grid-template-columns:1fr}}
 @media(max-width:480px){.g4{grid-template-columns:1fr}}
@@ -25,7 +25,7 @@ h2{font-size:clamp(24px,4.5vw,38px);text-align:center;margin:36px 0 6px;font-wei
 .big{font-size:34px;font-weight:800;letter-spacing:-1px;margin:6px 0 2px}.big small{font-size:15px}
 .note{text-align:center;color:var(--mut);font-size:12.5px;line-height:1.7;margin:16px auto;max-width:700px}
 .blk{background:var(--blk);color:#fff;border-radius:30px;padding:26px;margin:14px 0}
-.blk .k{color:#8da4c4}
+.blk .k{color:#a1a1a6}
 .pill{display:inline-block;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700}
 .lo{background:#e3f4e8;color:#1f7a3a}.mi{background:#fdebd9;color:#a35b10}.hi{background:#fbe3e0;color:#b5281b}.gy{background:var(--seg);color:var(--mut)}
 .blk .lo{background:#10301b;color:#6fe08f}.blk .mi{background:#3a2610;color:#f3b160}.blk .hi{background:#3a1512;color:#ff8d82}
@@ -44,20 +44,20 @@ h2{font-size:clamp(24px,4.5vw,38px);text-align:center;margin:36px 0 6px;font-wei
 input[type=number],input[type=text],textarea{background:var(--seg);border:0;border-radius:10px;padding:8px 10px;color:#2f6fde;font:inherit;font-weight:700;width:96px;text-align:right}
 textarea{width:100%;text-align:left;color:var(--ink);font-weight:400;min-height:110px}
 .chips button{border:0;background:var(--seg);color:var(--ink);padding:10px 16px;border-radius:22px;font:inherit;font-weight:700;cursor:pointer;margin:0 6px 8px 0}
-.chips button.on{background:#2f6fde;color:#fff}
+.chips button.on{background:#1d1d1f;color:#fff}
 table{width:100%;border-collapse:collapse}th,td{text-align:right;padding:12px 6px;border-bottom:1px solid var(--line)}th:first-child,td:first-child{text-align:left}th{color:var(--mut);font-weight:500;font-size:12px}
-tr.hl td{background:#2f6fde15}
+tr.hl td{background:#f1edfd33}
 .tw{overflow-x:auto}
 .bar{height:36px;border-radius:18px;display:flex;overflow:hidden;margin:14px 0}
-.btn{border:0;border-radius:24px;padding:13px 22px;font:inherit;font-weight:700;color:#fff;background:linear-gradient(90deg,#6fb1fc,#2f6fde);opacity:.55}
-.tag{background:#d0e1fd;color:#1f5bb8;border-radius:20px;padding:6px 12px;font-weight:800;font-size:12px}
+.btn{border:0;border-radius:24px;padding:13px 22px;font:inherit;font-weight:700;color:#fff;background:linear-gradient(90deg,#c4a6f2,#9db8f0);opacity:.55}
+.tag{background:#e8def9;color:#6a35c9;border-radius:20px;padding:6px 12px;font-weight:800;font-size:12px}
 .path{display:flex;gap:8px;flex-wrap:wrap;align-items:center;border:1px solid var(--line);border-radius:24px;padding:14px 16px;margin:10px 0}
-.path span.t{background:#d0e1fd;color:#1f5bb8;border-radius:16px;padding:7px 12px;font-weight:700;font-size:13px}
+.path span.t{background:#dfeafc;color:#1f5bb8;border-radius:16px;padding:7px 12px;font-weight:700;font-size:13px}
 .path b.r{margin-left:auto;text-align:right}
-.ai{display:flex;gap:10px;align-items:center;background:linear-gradient(90deg,#e3edfc,#d0e1fd);color:#102a43;border-radius:30px;padding:16px 22px;margin-bottom:16px;font-weight:700}
+.ai{display:flex;gap:10px;align-items:center;background:linear-gradient(90deg,#f0ebfd,#e8f0fd);color:#1d1d1f;border-radius:30px;padding:16px 22px;margin-bottom:16px;font-weight:700}
 .ring{position:relative;width:96px;height:96px;flex:none}.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:0}
 .rem{display:flex;gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}.rem:last-child{border:0}
-.btn.go{opacity:1;cursor:pointer}.btn:disabled{opacity:.45;cursor:not-allowed}.ev{border:1px solid var(--line);border-radius:18px;padding:14px;margin:10px 0}blockquote{margin:8px 0;padding:8px 12px;border-left:3px solid #6fb1fc;background:var(--seg);border-radius:8px;font-size:13px}.imgs{display:grid;grid-template-columns:1fr 1fr;gap:12px}.imgs img{width:100%;border-radius:18px;display:block}.err{color:var(--red);font-size:13px;margin:8px 0}.tgl{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));border:0;background:var(--card);color:var(--ink);border-radius:20px;padding:9px 13px;box-shadow:0 2px 10px #0003;cursor:pointer;font-size:16px}
+.btn.go{opacity:1;cursor:pointer}.btn:disabled{opacity:.45;cursor:not-allowed}.ev{border:1px solid var(--line);border-radius:18px;padding:14px;margin:10px 0}blockquote{margin:8px 0;padding:8px 12px;border-left:3px solid #9db8f0;background:var(--seg);border-radius:8px;font-size:13px}.imgs{display:grid;grid-template-columns:1fr 1fr;gap:12px}.imgs img{width:100%;border-radius:18px;display:block}.err{color:var(--red);font-size:13px;margin:8px 0}.tgl{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));border:0;background:var(--card);color:var(--ink);border-radius:20px;padding:9px 13px;box-shadow:0 2px 10px #0003;cursor:pointer;font-size:16px}
 </style></head><body><div class="w">
 <h1>AIDC 生態保費試算</h1><p class="sub">把生態風險，變成看得懂的保費（Flask 安全後端版）。</p>
 <div class="tabs" id="tabs"></div>
@@ -65,8 +65,8 @@ tr.hl td{background:#2f6fde15}
 <p class="note"><b style="color:var(--ink)">模擬情境。</b>以虛擬 AIDC 基地示範；分數、費率與成本皆為假設，並非業界報價或精算結果。AI 請求統一經由 Flask 後端代理呼叫 Gemini API，確保金鑰隱私安全。</p>
 <div id="pane"></div>
 <div class="note" style="margin-top:30px">
-<button class="btn" style="opacity:1;background:#2f6fde" id="expJ">匯出 JSON</button>
-<button class="btn" style="opacity:1;background:#2f6fde" id="expC">匯出 CSV</button></div>
+<button class="btn" style="opacity:1;background:#1d1d1f" id="expJ">匯出 JSON</button>
+<button class="btn" style="opacity:1;background:#1d1d1f" id="expC">匯出 CSV</button></div>
 </div><button class="tgl" id="tgl" title="切換深淺色">◐</button>
 <script>
 const $=s=>document.querySelector(s);
@@ -90,7 +90,7 @@ function claim(x){const I=Math.min(Math.max(x.E-x.D,0),x.L),U=x.C-I,G=Math.max(U
 const pc=l=>l==='低'?'lo':l==='中'?'mi':'hi';
 const wan=n=>f(n,1)+'<small> 萬</small>';
 function gauge(s,col){const p=Math.min(s,100)/100,a=Math.PI*(1-p),x=100+80*Math.cos(a),y=100-80*Math.sin(a);
-return`<svg viewBox="0 0 200 118" width="100%" style="max-width:260px"><path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="#2a4d69" stroke-width="14" stroke-linecap="round"/><path d="M20 100A80 80 0 0 1 ${x} ${y}" fill="none" stroke="${col}" stroke-width="14" stroke-linecap="round"/><text x="100" y="104" text-anchor="middle" fill="#fff" font-size="34" font-weight="800">${f(s)}</text></svg>`}
+return`<svg viewBox="0 0 200 118" width="100%" style="max-width:260px"><path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="#2a2a2c" stroke-width="14" stroke-linecap="round"/><path d="M20 100A80 80 0 0 1 ${x} ${y}" fill="none" stroke="${col}" stroke-width="14" stroke-linecap="round"/><text x="100" y="104" text-anchor="middle" fill="#fff" font-size="34" font-weight="800">${f(s)}</text></svg>`}
 function radar(){const cx=150,cy=140,R=95,n=6,pt=(i,v)=>{const a=-Math.PI/2+i*2*Math.PI/n;return[cx+R*v*Math.cos(a),cy+R*v*Math.sin(a)]};
 const poly=st=>IND.map((x,i)=>pt(i,S.sc[st][x.k]/5).join(',')).join(' ');
 let g=[.2,.4,.6,.8,1].map(v=>`<polygon points="${IND.map((_,i)=>pt(i,v).join(' ')).join(' ')}" fill="none" stroke="var(--line)"/>`).join('');
@@ -157,13 +157,14 @@ const red=ls.some(z=>z.l[0]==='紅燈');
 h+=`</div><div class="c" style="margin-top:14px"><div class="k">${red?'⚠ 有紅燈：須建立責任人、改善期限與複查紀錄':'改善與複查紀錄（紅燈時必填）'}</div><div class="in">責任人<input type="text" style="width:60%" value="${S.own}" data-o="S" data-k="own"></div><div class="in">改善期限<input type="text" style="width:60%" placeholder="YYYY-MM-DD" value="${S.due}" data-o="S" data-k="due"></div><div class="in">複查紀錄<input type="text" style="width:60%" value="${S.rev}" data-o="S" data-k="rev"></div></div>
 <p class="note">門檻為示範值，實際須依物種、季節與專業意見調整。</p>`;return h}
 function search(st){const cur={...S.sc[st]},s0=calcS(cur),h0=lvl(s0,cur)==='高',q0=Qf(s0,S.soc[st],S.gov[st]),m0=mult(q0,h0);if(m0===1)return{m0,res:[]};
-const ks=IND.map(x=>x.k),out=[];(function rec(i,sc,ch){if(i===6){if(!ch)return;const s=calcS(sc),hi=lvl(sc)==='高',m=mult(Qf(s,S.soc[st],S.gov[st]),hi);if(m<m0)out.push({sc:{...sc},ch,s,q:Qf(s,S.soc[st],S.gov[st]),m});return}
+const ks=IND.map(x=>x.k),out=[];(function rec(i,sc,ch){if(i===6){if(!ch)return;const s=calcS(sc),hi=lvl(s,sc)==='高',m=mult(Qf(s,S.soc[st],S.gov[st]),hi);if(m<m0)out.push({sc:{...sc},ch,s,q:Qf(s,S.soc[st],S.gov[st]),m});return}
 const k=ks[i];for(let v=1;v<=cur[k];v++){sc[k]=v;rec(i+1,sc,ch+(v<cur[k]?1:0))}sc[k]=cur[k]})(0,{...cur},0);
 out.sort((a,b)=>a.ch-b.ch||b.m-a.m||a.s-b.s);const mn=out.length?out[0].ch:0;
 return{m0,q0,res:out.filter(o=>o.ch===mn).sort((a,b)=>a.m-b.m||a.s-b.s).slice(0,3)}}
 
+// --- 已正確串接 Render 雲端後端的 API 呼叫函數 ---
 async function callGemini(prompt, imageBase64List = [], jsonMode = false) {
-  const response = await fetch('/api/gemini', {
+  const response = await fetch('https://ai-backend-hkff.onrender.com/api/gemini', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
