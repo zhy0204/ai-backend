@@ -6,7 +6,21 @@
 <title>AIDC 生態保費試算系統</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
+/* 🎨 動態佈景主題色彩變數系統（支援自動跟隨系統或手動切換） */
 :root {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --card-hover: #f1f5f9;
+  --ink: #0f172a;
+  --mut: #64748b;
+  --seg: #f1f5f9;
+  --line: #e2e8f0;
+  --accent: #0284c7;
+  --accent-glow: rgba(2, 132, 199, 0.15);
+  --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme="dark"] {
   --bg: #09090b;
   --card: #121216;
   --card-hover: #18181c;
@@ -14,22 +28,27 @@
   --mut: #a1a1aa;
   --seg: #1a1a20;
   --line: #27272a;
-  --blk: #000;
   --accent: #38bdf8;
   --accent-glow: rgba(56, 189, 248, 0.15);
-  --org: #f97316;
-  --grn: #22c55e;
-  --blu: #3b82f6;
-  --red: #ef4444;
-  --yel: #eab308;
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  box-sizing: border-box;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #09090b;
+    --card: #121216;
+    --card-hover: #18181c;
+    --ink: #f4f4f5;
+    --mut: #a1a1aa;
+    --seg: #1a1a20;
+    --line: #27272a;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.15);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
 }
 
 * { box-sizing: border-box; }
-html { scroll-padding-top: env(safe-area-inset-top, 0px); }
-
 body {
   margin: 0;
   background: var(--bg);
@@ -37,117 +56,135 @@ body {
   font-family: "Plus Jakarta Sans", "Noto Sans TC", -apple-system, sans-serif;
   font-size: 14px;
   line-height: 1.6;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.w { max-width: 1100px; margin: auto; padding: 40px 20px 80px; }
+.w { max-width: 1160px; margin: auto; padding: 32px 20px 80px; }
 
-/* 標題與副標：加入科技感發光與柔和漸層 */
-h1 {
-  font-size: clamp(28px, 5vw, 48px);
-  text-align: center;
-  margin: 0 0 8px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  background: linear-gradient(135deg, #fff 30%, var(--mut) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.sub { text-align: center; color: var(--mut); font-size: 16px; margin: 0 0 32px; font-weight: 500; }
-
-h2 { font-size: clamp(20px, 3.5vw, 30px); text-align: center; margin: 40px 0 12px; font-weight: 700; color: #fff; }
-
-/* 導覽列：毛玻璃與浮動科技感 */
-.tabs {
+/* 頂部導覽列與主題切換選項 */
+.top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.theme-switcher {
   display: flex;
-  gap: 6px;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 99px;
-  padding: 6px;
-  width: max-content;
-  max-width: 100%;
-  margin: 0 auto 32px;
-  overflow-x: auto;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px);
+  padding: 4px;
+  box-shadow: var(--shadow);
 }
-.tabs button {
+.theme-switcher button {
   border: 0;
   background: none;
   color: var(--mut);
-  padding: 10px 24px;
+  padding: 6px 14px;
   border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.theme-switcher button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* 主標題排版優化 */
+h1 {
+  font-size: clamp(26px, 4.5vw, 42px);
+  text-align: left;
+  margin: 0 0 6px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+.sub { text-align: left; color: var(--mut); font-size: 15px; margin: 0 0 24px; font-weight: 500; }
+
+h2 { font-size: clamp(20px, 3vw, 28px); text-align: left; margin: 32px 0 12px; font-weight: 700; }
+
+/* 分頁導覽：改為具現代感的膠囊浮動列 */
+.tabs {
+  display: flex;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 6px;
+  width: 100%;
+  margin: 0 auto 28px;
+  overflow-x: auto;
+  box-shadow: var(--shadow);
+}
+.tabs button {
+  flex: 1;
+  border: 0;
+  background: none;
+  color: var(--mut);
+  padding: 12px 16px;
+  border-radius: 12px;
   font: inherit;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
+  text-align: center;
 }
-.tabs button:hover { color: var(--ink); }
+.tabs button:hover { color: var(--ink); background: var(--card-hover); }
 .tabs button.on {
   background: var(--accent);
-  color: #000;
-  box-shadow: 0 0 20px var(--accent-glow);
+  color: #fff;
+  box-shadow: 0 4px 12px var(--accent-glow);
   font-weight: 700;
 }
 
-/* 網格與卡片設計：提升留白與微發光邊框 */
+/* 網格與大卡片結構 */
 .g { display: grid; gap: 16px; }
 .g4 { grid-template-columns: repeat(4, 1fr); }
 .g2 { grid-template-columns: repeat(2, 1fr); }
-@media(max-width: 760px) { .g4, .g2 { grid-template-columns: 1fr 1fr; } .g2.stack { grid-template-columns: 1fr; } }
-@media(max-width: 480px) { .g4 { grid-template-columns: 1fr; } }
+@media(max-width: 860px) { .g4 { grid-template-columns: 1fr 1fr; } .g2 { grid-template-columns: 1fr; } }
 
 .c {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 20px;
   padding: 24px;
-  min-width: 0;
-  transition: border-color 0.25s ease, transform 0.25s ease;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
-.c:hover { border-color: rgba(56, 189, 248, 0.3); }
+.c:hover { border-color: var(--accent); }
 
 .k { color: var(--mut); font-size: 13px; display: flex; align-items: center; gap: 8px; font-weight: 500; }
 .d { width: 8px; height: 8px; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px currentColor; }
 
-.big { font-size: 32px; font-weight: 700; letter-spacing: -1px; margin: 8px 0 4px; color: #fff; }
+.big { font-size: 32px; font-weight: 700; letter-spacing: -1px; margin: 8px 0 4px; }
 .big small { font-size: 14px; color: var(--mut); font-weight: 400; }
 
-.note { text-align: center; color: var(--mut); font-size: 13px; line-height: 1.8; margin: 24px auto; max-width: 720px; }
+.note { color: var(--mut); font-size: 13px; line-height: 1.8; margin: 20px 0; }
 
 .blk {
-  background: linear-gradient(145deg, #18181c, #0d0d10);
+  background: var(--card);
   border: 1px solid var(--line);
-  color: #fff;
-  border-radius: 24px;
+  border-left: 4px solid var(--accent);
+  border-radius: 20px;
   padding: 28px;
   margin: 16px 0;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  box-shadow: var(--shadow);
 }
-.blk .k { color: #a1a1aa; }
 
-.pill { display: inline-block; border-radius: 99px; padding: 4px 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-.lo { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
-.mi { background: rgba(234, 179, 8, 0.15); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.3); }
-.hi { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-.gy { background: var(--seg); color: var(--mut); border: 1px solid var(--line); }
+.pill { display: inline-block; border-radius: 99px; padding: 4px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.lo { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.mi { background: rgba(234, 179, 8, 0.15); color: #eab308; }
+.hi { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.gy { background: var(--seg); color: var(--mut); }
 
-.blk .lo { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
-.blk .mi { background: rgba(234, 179, 8, 0.2); color: #facc15; }
-.blk .hi { background: rgba(239, 68, 68, 0.2); color: #f87171; }
-
-/* 切換按鈕群 */
-.seg { display: flex; background: var(--seg); border-radius: 14px; padding: 4px; margin: 12px 0; border: 1px solid var(--line); }
-.seg button { flex: 1; border: 0; background: none; color: var(--mut); font: inherit; font-size: 16px; font-weight: 600; padding: 10px 0; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
-.seg button.on { background: var(--card); color: var(--accent); box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-weight: 700; }
+/* 評分與選項切換 */
+.seg { display: flex; background: var(--seg); border-radius: 12px; padding: 4px; margin: 10px 0; border: 1px solid var(--line); }
+.seg button { flex: 1; border: 0; background: none; color: var(--mut); font: inherit; font-size: 15px; font-weight: 600; padding: 8px 0; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.seg button.on { background: var(--card); color: var(--accent); box-shadow: var(--shadow); font-weight: 700; }
 
 .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.ic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: #fff; font-size: 18px; flex: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-.hd { font-weight: 700; font-size: 17px; color: #fff; }
+.ic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: #fff; font-size: 18px; flex: none; }
+.hd { font-weight: 700; font-size: 16px; }
 .lv { color: var(--mut); font-size: 12.5px; min-height: 20px; margin-bottom: 8px; }
 
-.foot { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 14px; margin-top: 14px; align-items: center; }
+.foot { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; align-items: center; }
 .fm { background: var(--seg); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--mut); margin-top: 16px; line-height: 1.8; overflow-x: auto; }
 
 .gauges { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; text-align: center; gap: 16px; }
@@ -167,9 +204,7 @@ input[type=number], input[type=text], input[type=date], textarea {
   width: 108px;
   text-align: right;
   outline: none;
-  transition: border-color 0.2s;
 }
-input:focus, textarea:focus { border-color: var(--accent); }
 textarea { width: 100%; text-align: left; color: var(--ink); font-weight: 400; min-height: 120px; resize: vertical; }
 
 .chips button {
@@ -184,75 +219,100 @@ textarea { width: 100%; text-align: left; color: var(--ink); font-weight: 400; m
   margin: 0 6px 8px 0;
   transition: all 0.2s;
 }
-.chips button:hover { border-color: var(--mut); }
-.chips button.on { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+.chips button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 table { width: 100%; border-collapse: collapse; }
 th, td { text-align: right; padding: 14px 10px; border-bottom: 1px solid var(--line); }
 th:first-child, td:first-child { text-align: left; }
-th { color: var(--mut); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-tr.hl td { background: rgba(56, 189, 248, 0.08); color: var(--accent); font-weight: 600; }
+th { color: var(--mut); font-weight: 600; font-size: 12px; text-transform: uppercase; }
+tr.hl td { background: var(--seg); color: var(--accent); font-weight: 600; }
 .tw { overflow-x: auto; }
 
-.bar { height: 28px; border-radius: 14px; display: flex; overflow: hidden; margin: 16px 0; background: var(--seg); border: 1px solid var(--line); }
+.bar { height: 24px; border-radius: 12px; display: flex; overflow: hidden; margin: 16px 0; background: var(--seg); }
 
-/* 主按鈕：優雅的漸層發光與互動感 */
 .btn {
   border: 0;
   border-radius: 99px;
   padding: 12px 24px;
   font: inherit;
   font-weight: 700;
-  color: #000;
-  background: linear-gradient(135deg, #38bdf8, #818cf8);
-  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
+  color: #fff;
+  background: var(--accent);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 4px 14px var(--accent-glow);
+  transition: transform 0.2s, opacity 0.2s;
 }
-.btn:hover { transform: translateY(-1px); box-shadow: 0 6px 25px rgba(56, 189, 248, 0.5); }
-.btn:active { transform: translateY(0); }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn:hover { transform: translateY(-1px); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
-.tag { background: rgba(129, 140, 248, 0.15); color: #a5b4fc; border: 1px solid rgba(129, 140, 248, 0.3); border-radius: 99px; padding: 4px 12px; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; }
+.tag { background: var(--seg); color: var(--accent); border: 1px solid var(--line); border-radius: 99px; padding: 4px 12px; font-weight: 700; font-size: 11px; }
 
-.path { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; border: 1px solid var(--line); background: var(--seg); border-radius: 16px; padding: 14px 18px; margin: 10px 0; }
-.path span.t { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 6px 10px; font-weight: 600; font-size: 12px; }
-.path b.r { margin-left: auto; text-align: right; color: #fff; }
+.path { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; border: 1px solid var(--line); background: var(--seg); border-radius: 14px; padding: 14px 18px; margin: 10px 0; }
+.path span.t { background: var(--card); color: var(--accent); border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; font-weight: 600; font-size: 12px; }
+.path b.r { margin-left: auto; text-align: right; }
 
-.ai { display: flex; gap: 12px; align-items: center; background: linear-gradient(145deg, rgba(56, 189, 248, 0.1), rgba(129, 140, 248, 0.05)); border: 1px solid rgba(56, 189, 248, 0.2); color: var(--ink); border-radius: 20px; padding: 18px 24px; margin-bottom: 20px; font-weight: 600; }
+.ai { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 16px; padding: 16px 20px; margin-bottom: 20px; font-weight: 600; box-shadow: var(--shadow); }
 
-.ring { position: relative; width: 84px; height: 84px; flex: none; }
+.ring { position: relative; width: 80px; height: 80px; flex: none; }
 .ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 0; }
 
 .rem { display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line); }
-.rem:last-child { border: 0; }
-
-.btn.go { opacity: 1; }
-.ev { border: 1px solid var(--line); background: var(--seg); border-radius: 16px; padding: 16px; margin: 12px 0; }
+.ev { border: 1px solid var(--line); background: var(--seg); border-radius: 14px; padding: 16px; margin: 12px 0; }
 blockquote { margin: 8px 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--card); border-radius: 8px; font-size: 13px; color: var(--mut); }
 .imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.imgs img { width: 100%; border-radius: 14px; display: block; border: 1px solid var(--line); }
-.err { color: var(--red); font-size: 13px; margin: 8px 0; font-weight: 600; }
-
-/* 隱藏淺色切換鈕，因為本設計全面精緻化為高質感深色科技風 */
-.tgl { display: none; }
+.imgs img { width: 100%; border-radius: 12px; display: block; border: 1px solid var(--line); }
+.err { color: #ef4444; font-size: 13px; margin: 8px 0; font-weight: 600; }
 </style>
 </head>
 <body>
 <div class="w">
-<h1>AIDC 生態保費試算系統</h1>
-<p class="sub">把生態風險，轉化為直覺、可視化的動態保費管理與合規儀表板。</p>
-<div class="tabs" id="tabs"></div>
-<div class="g g4" id="sum"></div>
-<p class="note"><b style="color:var(--ink)">模擬情境。</b>以虛擬 AIDC 基地示範；分數、費率與成本皆為假設，並非業界報價或精算結果。AI 請求統一經由安全後端代理呼叫，確保金鑰隱私安全。</p>
-<div id="pane"></div>
-<div class="note" style="margin-top:40px; display: flex; justify-content: center; gap: 12px;">
-<button class="btn" style="background:var(--seg); color:var(--ink); border:1px solid var(--line); box-shadow:none;" id="expJ">匯出 JSON</button>
-<button class="btn" style="background:var(--seg); color:var(--ink); border:1px solid var(--line); box-shadow:none;" id="expC">匯出 CSV</button></div>
+  <div class="top-bar">
+    <div>
+      <h1>AIDC 生態保費試算系統</h1>
+      <p class="sub">把生態風險，轉化為直覺、可視化的動態保費管理與合規儀表板。</p>
+    </div>
+    <!-- 💡 手動切換主題選項 -->
+    <div class="theme-switcher">
+      <button onclick="setTheme('light')" id="btnLight">淺色</button>
+      <button onclick="setTheme('dark')" id="btnDark">深色</button>
+      <button onclick="setTheme('auto')" id="btnAuto">自動</button>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div class="g g4" id="sum"></div>
+  <div id="pane"></div>
+
+  <div class="note" style="margin-top:40px; display: flex; justify-content: center; gap: 12px;">
+    <button class="btn" style="background:var(--seg); color:var(--ink); border:1px solid var(--line); box-shadow:none;" id="expJ">匯出 JSON</button>
+    <button class="btn" style="background:var(--seg); color:var(--ink); border:1px solid var(--line); box-shadow:none;" id="expC">匯出 CSV</button>
+  </div>
 </div>
 
 <script>
 const $=s=>document.querySelector(s);
+
+// 主題切換邏輯
+function setTheme(mode) {
+  document.querySelectorAll('.theme-switcher button').forEach(b => b.classList.remove('active'));
+  if(mode === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    $('#btnLight').classList.add('active');
+    localStorage.setItem('theme', 'light');
+  } else if(mode === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    $('#btnDark').classList.add('active');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    $('#btnAuto').classList.add('active');
+    localStorage.removeItem('theme');
+  }
+}
+// 初始化載入記憶的主題
+const savedTheme = localStorage.getItem('theme');
+if(savedTheme) setTheme(savedTheme); else setTheme('auto');
+
 const IND=[
 {k:'h',n:'棲地敏感性',w:30,c:'#22c55e',i:'🍃',L:['人工化基地且未辨識敏感棲地','一般綠地','鄰接自然水域或半自然棲地','影響範圍涉及重要棲地','涉及保護區 or 保育物種重要棲地'],r:'棲地'},
 {k:'v',n:'植被移除比例',w:25,c:'#10b981',i:'🌳',L:['低於 10%','10% 至未滿 25%','25% 至未滿 50%','50% 至 75%','高於 75%'],r:'植被'},
@@ -273,13 +333,13 @@ function claim(x){const I=Math.min(Math.max(x.E-x.D,0),x.L),U=x.C-I,G=Math.max(U
 const pc=l=>l==='低'?'lo':l==='中'?'mi':'hi';
 const wan=n=>f(n,1)+'<small> 萬</small>';
 function gauge(s,col){const p=Math.min(s,100)/100,a=Math.PI*(1-p),x=100+80*Math.cos(a),y=100-80*Math.sin(a);
-return`<svg viewBox="0 0 200 118" width="100%" style="max-width:240px"><path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="#27272a" stroke-width="12" stroke-linecap="round"/><path d="M20 100A80 80 0 0 1 ${x} ${y}" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round"/><text x="100" y="104" text-anchor="middle" fill="#fff" font-size="32" font-weight="700">${f(s)}</text></svg>`}
+return`<svg viewBox="0 0 200 118" width="100%" style="max-width:220px"><path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="var(--line)" stroke-width="12" stroke-linecap="round"/><path d="M20 100A80 80 0 0 1 ${x} ${y}" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round"/><text x="100" y="104" text-anchor="middle" fill="var(--ink)" font-size="32" font-weight="700">${f(s)}</text></svg>`}
 function radar(){const cx=150,cy=140,R=95,n=6,pt=(i,v)=>{const a=-Math.PI/2+i*2*Math.PI/n;return[cx+R*v*Math.cos(a),cy+R*v*Math.sin(a)]};
 const poly=st=>IND.map((x,i)=>pt(i,S.sc[st][x.k]/5).join(',')).join(' ');
 let g=[.2,.4,.6,.8,1].map(v=>`<polygon points="${IND.map((_,i)=>pt(i,v).join(' ')).join(' ')}" fill="none" stroke="var(--line)"/>`).join('');
 g+=IND.map((x,i)=>{const[a,b]=pt(i,1.22);return`<text x="${a}" y="${b+4}" text-anchor="middle" fill="var(--mut)" font-size="12">${x.r}</text>`}).join('');
-return`<svg viewBox="0 0 300 280" width="100%">${g}<polygon points="${poly('b')}" fill="rgba(249, 115, 22, 0.15)" stroke="#f97316" stroke-width="2"/><polygon points="${poly('a')}" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2"/></svg>`}
-function ringSvg(p,col){const r=38,c=2*Math.PI*r,v=Math.min(Math.max(p,0),100)/100;return`<svg class="ring" viewBox="0 0 96 96"><circle cx="48" cy="48" r="${r}" fill="none" stroke="var(--seg)" stroke-width="8"/><circle cx="48" cy="48" r="${r}" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${c*v} ${c}" transform="rotate(-90 48 48)"/></svg>`}
+return`<svg viewBox="0 0 300 280" width="100%">${g}<polygon points="${poly('b')}" fill="rgba(249, 115, 22, 0.15)" stroke="#f97316" stroke-width="2"/><polygon points="${poly('a')}" fill="rgba(2, 132, 199, 0.15)" stroke="var(--accent)" stroke-width="2"/></svg>`}
+function ringSvg(p,col){const r=36,c=2*Math.PI*r,v=Math.min(Math.max(p,0),100)/100;return`<svg class="ring" viewBox="0 0 96 96"><circle cx="48" cy="48" r="${r}" fill="none" stroke="var(--seg)" stroke-width="8"/><circle cx="48" cy="48" r="${r}" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${c*v} ${c}" transform="rotate(-90 48 48)"/></svg>`}
 const light=(v,g,y)=>v>=g?['綠燈','#22c55e','lo']:v>=y?['黃燈','#eab308','mi']:['紅燈','#ef4444','hi'];
 function summary(){const b=prem('b'),a=prem('a'),cl=claim(S.ins);
 $('#sum').innerHTML=`<div class="c"><div class="k"><i class="d" style="background:#f97316"></i>施工前生態分數 S</div><div class="big">${f(b.s)}</div><div class="k">${b.lv}風險</div></div>
@@ -289,47 +349,43 @@ $('#sum').innerHTML=`<div class="c"><div class="k"><i class="d" style="backgroun
 function tabs(){$('#tabs').innerHTML=['評估','保費','理賠','復育','查核 AI'].map((t,i)=>`<button class="${S.tab===i?'on':''}" onclick="S.tab=${i};draw()">${t}</button>`).join('')}
 function seg(st,k){return`<div class="seg">${[1,2,3,4,5].map(v=>`<button class="${S.sc[st][k]===v?'on':''}" onclick="S.sc.${st}.${k}=${v};draw()">${v}</button>`).join('')}</div>`}
 function pAssess(){const b=prem('b'),a=prem('a');
-let h=`<h2>六大指標，透視生態風險</h2><p class="note" style="margin-top:0">依 TNFD LEAP 架構評估。點選 1–5 分進行互動調整。</p>
+let h=`<h2>六大指標，透視生態風險</h2><p class="note">依 TNFD LEAP 架構評估。點選 1–5 分進行互動調整。</p>
 <div class="blk"><div class="k">生態風險分數 S 總覽</div><div class="gauges"><div>${gauge(b.s,'#f97316')}<div>施工前</div><span class="pill ${pc(b.lv)}">${b.lv}風險</span></div>
 <div><div class="k" style="justify-content:center">變動幅度</div><div class="big">${a.s-b.s>0?'+':'−'}${f(Math.abs(a.s-b.s))}</div><span class="pill ${pc(a.lv)}">${b.lv}級 → ${a.lv}級</span></div>
 <div>${gauge(a.s,'#22c55e')}<div>施工後</div><span class="pill ${pc(a.lv)}">${a.lv}風險</span></div></div></div><div class="g g2 stack">`;
 IND.forEach(x=>{const cb=x.w*(S.sc.b[x.k]-1)/4,ca=x.w*(S.sc.a[x.k]-1)/4,d=cb-ca;
-h+=`<div class="c"><div class="row"><div class="row"><div class="ic" style="background:${x.c}">${x.i}</div><div><div class="hd">${x.n}</div><div class="k">權重 ${x.w}%</div></div></div><div style="text-align:right"><b style="font-size:22px; color:#fff">${x.w}%</b></div></div>
+h+=`<div class="c"><div class="row"><div class="row"><div class="ic" style="background:${x.c}">${x.i}</div><div><div class="hd">${x.n}</div><div class="k">權重 ${x.w}%</div></div></div><div style="text-align:right"><b style="font-size:20px">${x.w}%</b></div></div>
 <div class="row" style="margin-top:14px"><b>施工前評分</b><span class="k">${S.sc.b[x.k]} 分</span></div>${seg('b',x.k)}<div class="lv">${x.L[S.sc.b[x.k]-1]}</div>
 <div class="row"><b>施工後評分</b><span class="k">${S.sc.a[x.k]} 分</span></div>${seg('a',x.k)}<div class="lv">${x.L[S.sc.a[x.k]-1]}</div>
-<div class="foot"><span class="k">加權貢獻 <b style="color:var(--ink);font-size:15px">${f(cb)} → ${f(ca)}</b></span><span class="pill ${d>0?'lo':d<0?'hi':'gy'}">${d>0?'↓ '+f(d):d<0?'↑ '+f(-d):'持平'}</span></div></div>`});
-h+=`</div><div class="fm">公式：S = 100 × Σ〔權重 × (分數 − 1) ÷ 4〕 · S < 30 低｜30 ≤ S < 60 中｜S ≥ 60 高</div>
-<div class="g g2 stack" style="margin-top:16px"><div class="c"><div class="k">風險輪廓分佈</div><div class="hd" style="font-size:18px; margin-top:4px">施工前後對比雷達圖</div>${radar()}<div class="k" style="justify-content:center;gap:16px; margin-top:12px"><span><i class="d" style="background:#f97316"></i> 施工前</span><span><i class="d" style="background:#38bdf8"></i> 施工後</span></div></div>
+<div class="foot"><span class="k">加權貢獻 <b>${f(cb)} → ${f(ca)}</b></span><span class="pill ${d>0?'lo':d<0?'hi':'gy'}">${d>0?'↓ '+f(d):d<0?'↑ '+f(-d):'持平'}</span></div></div>`});
+h+=`</div><div class="fm">公式：S = 100 × Σ〔權重 × (分數 − 1) ÷ 4〕</div><div class="g g2 stack" style="margin-top:16px"><div class="c"><div class="k">風險輪廓分佈</div><div class="hd" style="font-size:18px; margin-top:4px">施工前後對比雷達圖</div>${radar()}</div>
 <div class="c"><div class="k">加權降幅排行</div><div class="hd" style="font-size:18px;margin-bottom:14px">哪一項改善最多。</div>`;
 IND.map(x=>({x,d:x.w*(S.sc.b[x.k]-S.sc.a[x.k])/4})).sort((p,q)=>q.d-q.d).forEach(({x,d})=>{const pb=x.w*(S.sc.b[x.k]-1)/4,pa=x.w*(S.sc.a[x.k]-1)/4;
-h+=`<div class="row" style="margin:14px 0"><div style="width:110px;font-weight:600">${x.n}</div><div style="flex:1"><div style="height:6px;border-radius:3px;background:var(--line);width:100%"><div style="height:6px;border-radius:3px;background:#f97316;width:${pb/30*100}%"></div></div><div style="height:6px;border-radius:3px;background:var(--line);width:100%;margin-top:3px"><div style="height:6px;border-radius:3px;background:#38bdf8;width:${pa/30*100}%"></div></div></div><b style="width:52px;text-align:right;color:${d>0?'#4ade80':d<0?'#f87171':'var(--mut)'}">${d>0?'−':d<0?'+':'±'}${f(Math.abs(d))}</b></div>`});
+h+=`<div class="row" style="margin:14px 0"><div style="width:110px;font-weight:600">${x.n}</div><div style="flex:1"><div style="height:6px;border-radius:3px;background:var(--line);width:100%"><div style="height:6px;border-radius:3px;background:#f97316;width:${pb/30*100}%"></div></div><div style="height:6px;border-radius:3px;background:var(--line);width:100%;margin-top:3px"><div style="height:6px;border-radius:3px;background:var(--accent);width:${pa/30*100}%"></div></div></div><b style="width:52px;text-align:right;color:${d>0?'#22c55e':d<0?'#ef4444':'var(--mut)'}">${d>0?'−':d<0?'+':'±'}${f(Math.abs(d))}</b></div>`});
 return h+`</div></div>`}
 function num(o,k,min=0,max=1e9){return`<input type="number" value="${o[k]}" min="${min}" max="${max}" step="any" data-o="${o===S.ins?'ins':o===S.rs?'rs':o===S.soc?'soc':o===S.gov?'gov':'S'}" data-k="${k}">`}
 function pPrem(){const b=prem('b'),a=prem('a'),q2=Qf(a.s,S.soc.b,S.gov.b),m2=mult(q2,a.hi),p2=S.L*S.rate/100*m2,sc3=prem('a');
 const rows=[['改善前',b.s,S.soc.b,S.gov.b,b.q,b.m,b.p],['只改善生態',a.s,S.soc.b,S.gov.b,q2,m2,p2],['三構面皆改善',a.s,S.soc.a,S.gov.a,sc3.q,sc3.m,sc3.p]];
-return`<h2>ESG 綜合評分與保費試算</h2><p class="note" style="margin-top:0">Q＝50% 環境＋20% 社會＋30% 治理。重大生態風險具一票否決權。</p>
-<div class="blk"><div class="k">動態保費試算比較</div><div class="gauges"><div><span class="pill mi">施工前 · Q ${f(b.q)}</span><div class="big" style="font-size:48px">${f(b.p,1)}<small> 萬</small></div><div class="k" style="justify-content:center">${f(b.m,1)}× 倍數</div></div><div style="font-size:24px;color:var(--mut)">→</div>
-<div><span class="pill lo">施工後 · Q ${f(a.q)}</span><div class="big" style="font-size:48px">${f(a.p,1)}<small> 萬</small></div><div class="k" style="justify-content:center">${f(a.m,1)}× 倍數</div></div></div>
-<div style="text-align:center;margin-top:16px">${b.p>=a.p?'每年節省保費 <b style="color:#4ade80">'+f(b.p-a.p,2)+' 萬</b>（降幅 '+f(b.p?(b.p-a.p)/b.p*100:0,1)+'%）':'每年增加保費 '+f(a.p-b.p,2)+' 萬'}</div></div>
+return`<h2>ESG 綜合評分與保費試算</h2><p class="note">Q＝50% 環境＋20% 社會＋30% 治理。</p>
+<div class="blk"><div class="k">動態保費試算比較</div><div class="gauges"><div><span class="pill mi">施工前 · Q ${f(b.q)}</span><div class="big" style="font-size:42px">${f(b.p,1)}<small> 萬</small></div><div class="k" style="justify-content:center">${f(b.m,1)}× 倍數</div></div><div style="font-size:24px;color:var(--mut)">→</div>
+<div><span class="pill lo">施工後 · Q ${f(a.q)}</span><div class="big" style="font-size:42px">${f(a.p,1)}<small> 萬</small></div><div class="k" style="justify-content:center">${f(a.m,1)}× 倍數</div></div></div>
+<div style="text-align:center;margin-top:16px">${b.p>=a.p?'每年節省保費 <b style="color:#22c55e">'+f(b.p-a.p,2)+' 萬</b>':'每年增加保費 '+f(a.p-b.p,2)+' 萬'}</div></div>
 <div class="g g2 stack"><div class="c"><div class="k">社會與治理構面設定（0–100）</div>
 <div class="in">施工前 · 社會${num(S.soc,'b',0,100)}</div><div class="in">施工前 · 治理${num(S.gov,'b',0,100)}</div><div class="in">施工後 · 社會${num(S.soc,'a',0,100)}</div><div class="in">施工後 · 治理${num(S.gov,'a',0,100)}</div></div>
-<div class="c"><div class="k">保費試算核心參數</div><div class="in">保障上限 L（萬）${num(S,'L')}</div><div class="in">基準費率（%）${num(S,'rate')}</div>
-<div class="in"><span>Q ≥ 80</span><b>1.0×</b></div><div class="in"><span>60 ≤ Q < 80</span><b>1.3×</b></div><div class="in"><span>Q < 60 或高風險</span><b>1.6×</b></div></div></div>
-<div class="fm">Q = 0.5 × (100 − S) + 0.2 × 社會 + 0.3 × 治理 · 年保費 = 上限 × 費率 × 倍數</div>
+<div class="c"><div class="k">保費核心參數</div><div class="in">保障上限 L（萬）${num(S,'L')}</div><div class="in">基準費率（%）${num(S,'rate')}</div></div></div>
 <div class="c tw" style="margin-top:16px"><div class="k">情境策略對比表</div><table><tr><th>情境方案</th><th>S / 社 / 治</th><th>Q 值</th><th>倍數</th><th>預估年保費</th></tr>${rows.map((r,i)=>`<tr class="${i==1?'hl':''}"><td>${r[0]}</td><td>${f(r[1])} / ${r[2]} / ${r[3]}</td><td>${f(r[4])}</td><td>${f(r[5],1)}</td><td>${f(r[6],1)} 萬</td></tr>`).join('')}</table></div>`}
 function pClaim(){const x=S.ins,r=claim(x),tot=x.C||1;
-return`<h2>損害發生與保險給付試算</h2><p class="note" style="margin-top:0">保險先理賠、自留資金補足，精準評估財務缺口。</p>
+return`<h2>損害發生與保險給付試算</h2><p class="note">保險先理賠、自留資金補足，精準評估財務缺口。</p>
 <div class="c"><div class="chips"><span class="k" style="display:inline">快速預設情境：</span>${CL.map((c,i)=>`<button class="${S.cl===i?'on':''}" onclick="setCl(${i})">${c[0]}</button>`).join('')}</div>
 <div class="g g4" style="margin-top:12px"><div><div class="k"><i class="d" style="background:#3b82f6"></i>保險給付 I</div><div class="big">${wan(r.I)}</div></div><div><div class="k"><i class="d" style="background:#22c55e"></i>自留支應</div><div class="big">${wan(Math.min(r.U,x.R))}</div></div><div><div class="k"><i class="d" style="background:#ef4444"></i>資金缺口 G</div><div class="big">${wan(r.G)}</div></div></div>
 <div class="bar"><div style="width:${r.I/tot*100}%;background:#3b82f6"></div><div style="width:${Math.min(r.U,x.R)/tot*100}%;background:#22c55e"></div><div style="width:${r.G/tot*100}%;background:#ef4444"></div></div></div>
 <div class="g g2 stack" style="margin-top:16px"><div class="c"><div class="k">事故財務參數設定（單位：萬）</div>${[['C','總復育成本 C'],['E','保險範圍損失 E'],['D','自負額 D'],['L','保障上限 L'],['R','可動用自留資金 R']].map(([k,n])=>`<div class="in">${n}${num(x,k)}</div>`).join('')}</div>
-<div class="c"><div class="k">財務防護解析</div><div class="in">總復育成本 C<b>${f(x.C,1)} 萬</b></div><div class="in">保險給付 I<b>${f(r.I,1)} 萬 <span class="k">${f(r.I/tot*100,1)}%</span></b></div><div class="in">企業自行負擔 U<b>${f(r.U,1)} 萬</b></div><div class="in">自留資金支應<b>${f(Math.min(r.U,x.R),1)} 萬</b></div><div class="in" style="color:#ef4444">資金缺口 G<b>${f(r.G,1)} 萬</b></div><div class="in">資金覆蓋率 R÷U<b>${f(r.cov,1)}%</b></div></div></div>
-<div class="fm">I = min(max(E − D, 0), L) · U = C − I · G = max(U − R, 0)</div>`}
+<div class="c"><div class="k">財務防護解析</div><div class="in">總復育成本 C<b>${f(x.C,1)} 萬</b></div><div class="in">保險給付 I<b>${f(r.I,1)} 萬</b></div><div class="in">自留資金支應<b>${f(Math.min(r.U,x.R),1)} 萬</b></div><div class="in" style="color:#ef4444">資金缺口 G<b>${f(r.G,1)} 萬</b></div><div class="in">資金覆蓋率 R÷U<b>${f(r.cov,1)}%</b></div></div></div>`}
 function setCl(i){S.cl=i;const c=CL[i];Object.assign(S.ins,{C:c[1],E:c[2],D:c[3],L:c[4],R:c[5]});draw()}
 function pRest(){const r=S.rs,cl=claim(S.ins),it=[['進度達成率',r.ad/r.ap*100,100,80,'ad','ap','累計完成面積 ÷ 當期計畫面積','綠 ≥100% 黃 ≥80% 且 <100% 紅 <80%'],['存活率',r.al/r.pl*100,90,85,'al','pl','存活株數 ÷ 初植株數','綠 ≥90% 黃 ≥85% 且 <90% 紅 <85%'],['監測完成率',r.md/r.mp*100,100,90,'md','mp','實際次數 ÷ 應完成次數','綠 ≥100% 黃 ≥90% 且 <90% 紅 <90%'],['資金覆蓋率',cl.cov,100,80,null,null,'連動理賠頁：R '+f(S.ins.R,1)+' 萬 ÷ U '+f(cl.U,1)+' 萬','綠 ≥100% 黃 ≥80% 且 <100% 紅 <80%']];
 const ls=it.map(x=>{const v=isFinite(x[1])?x[1]:0;return{x,v,l:light(v,x[2],x[3])}});
 let h=`<h2>生態復育進度與指標監控</h2><div class="g g2 stack" style="margin-top:20px">`;
-ls.forEach(({x,v,l})=>{h+=`<div class="c"><div class="row"><div class="row" style="gap:16px">${ringSvg(v,l[1])}<div><div class="k">${x[0]}</div><div class="big" style="font-size:32px">${f(v,1)}%</div></div></div><span class="pill ${l[2]}">${l[0]}</span></div>
+ls.forEach(({x,v,l})=>{h+=`<div class="c"><div class="row"><div class="row" style="gap:16px">${ringSvg(v,l[1])}<div><div class="k">${x[0]}</div><div class="big" style="font-size:28px">${f(v,1)}%</div></div></div><span class="pill ${l[2]}">${l[0]}</span></div>
 <div class="row" style="margin-top:14px;justify-content:flex-start">${x[4]?num(r,x[4])+' / '+num(r,x[5]):''}<span class="k">${x[6]}</span></div><div class="k" style="margin-top:10px">${x[7]}</div></div>`});
 h+=`</div><div class="c" style="margin-top:16px"><div class="k">復育警示與追蹤</div>`;
 if(cl.G>0)h+=`<div class="rem"><i class="d" style="background:#ef4444;margin-top:6px"></i>單次事故缺口 ${f(cl.G,1)} 萬，建議提高自留資金</div>`;
@@ -413,18 +469,18 @@ const displayRemoval=v=>v==null?'—':v<0?'不適用（綠覆率增加）':f(v,1
 let h='<div class="imgs">'+['b','a'].map(w=>'<div>'+(I[w]?'<img src="'+I[w]+'">':'<div class="ev k" style="height:140px;justify-content:center">尚未提供影像</div>')+'<div class="row k" style="margin-top:8px"><span>'+(w==='b'?'施工前':'施工後')+'</span><span>'+(I[w==='b'?'gb':'ga']!=null?'綠覆 '+f(I[w==='b'?'gb':'ga'],2)+'%':'')+'</span></div></div>').join('')+'</div>';
 h+='<div class="chips" style="margin-top:16px"><button onclick="setDemo();draw()">換一組示範影像</button><button onclick="this.nextElementSibling.click()">上傳施工前</button><input type="file" accept="image/*" hidden onchange="up(\'b\',this)"><button onclick="this.nextElementSibling.click()">上傳施工後</button><input type="file" accept="image/*" hidden onchange="up(\'a\',this)"></div>';
 h+='<div class="ev"><b>基地分析範圍設定</b><p class="k">若截圖包含廠房周邊，可設定裁切範圍確保一致。</p><div class="g g4"><label class="k">左側 %<input id="roiX" type="number" min="0" max="99" value="'+S.roi.x+'"></label><label class="k">上方 %<input id="roiY" type="number" min="0" max="99" value="'+S.roi.y+'"></label><label class="k">寬度 %<input id="roiW" type="number" min="1" max="100" value="'+S.roi.w+'"></label><label class="k">高度 %<input id="roiH" type="number" min="1" max="100" value="'+S.roi.h+'"></label></div><button class="btn go" style="margin-top:12px; padding:8px 16px; font-size:13px;" onclick="applyRoi()">套用範圍並重算</button></div>';
-h+='<div class="c" style="background:var(--seg); margin-top: 12px;"><div class="in"><span>施工前綠覆率（HSV）</span><b>'+(I.gb==null?'—':f(I.gb,2)+'%')+'</b></div><div class="in"><span>施工後綠覆率（HSV）</span><b>'+(I.ga==null?'—':f(I.ga,2)+'%')+'</b></div><div class="in"><span>像素估算移除比例</span><b>'+displayRemoval(pr)+'</b></div><div class="in"><span>Gemini AI 影像判讀</span><b>'+(ap==null?'尚未判讀':displayRemoval(ap))+'</b></div><div class="in"><span>企業自評移除比例</span><b>'+sc+' 分</b></div><div class="in"><span>交叉驗證</span>'+(pr==null||ap==null?'<span class="pill gy">待判讀</span>':'<span class="pill '+(Math.abs(pctScore(Math.max(0,pr))-pctScore(Math.max(0,ap)))===0?'lo':'mi')+'">'+(Math.abs(pctScore(Math.max(0,pr))-pctScore(Math.max(0,ap)))===0?'同級':'差異須複核')+'</span>')+'</div></div>';return h}
+h+='<div class="c" style="background:var(--seg); margin-top: 12px;"><div class="in"><span>施工前綠覆率（HSV）</span><b>'+(I.gb==null?'—':f(I.gb,2)+'%')+'</b></div><div class="in"><span>施工後綠覆率（HSV）</span><b>'+(I.ga==null?'—':f(I.ga,2)+'%')+'</b></div><div class="in"><span>像素估算移除比例</span><b>'+displayRemoval(pr)+'</b></div><div class="in"><span>Gemini AI 影像判讀</span><b>'+(ap==null?'尚未判讀':displayRemoval(ap))+'</b></div><div class="in"><span>企業自評移除比例</span><b>'+sc+' 分</b></div></div>';return h}
 
 function pAudit2(){const sr=search(S.path),cur=S.sc[S.path],bs=k=>S.busy===k;
 const chip=(t,tx)=>'<button class="'+(S.path===t?'on':'')+'" onclick="S.path=\''+t+'\';S.plain=\'\';draw()">'+tx+'</button>';
 const dchip=(t,tx)=>'<button class="'+(S.docStage===t?'on':'')+'" onclick="S.docStage=\''+t+'\';draw()">'+tx+'</button>';
-let h='<h2>AI 智慧查核與決策輔助</h2><p class="note" style="margin-top:0">AI 僅提出審查建議，所有風險評分與保費計算皆由公式執行並經人工最終確認。</p><div class="ai"><i class="d" style="background:#38bdf8"></i>Secure Cloud AI 后端代理通道運行中</div>'+(S.err?'<div class="err">'+esc(S.err)+'</div>':'');
+let h='<h2>AI 智慧查核與決策輔助</h2><p class="note">AI 僅提出審查建議，所有風險評分與保費計算皆由公式執行並經人工最終確認。</p><div class="ai"><i class="d" style="background:var(--accent)"></i>Secure Cloud AI 后端代理通道運行中</div>'+(S.err?'<div class="err">'+esc(S.err)+'</div>':'');
 const dis=S.busy?' disabled':'';
-h+='<div class="c"><div class="row"><span class="k">① 佐證文件智慧判讀</span><span class="tag">Gemini AI</span></div><div class="hd" style="font-size:20px;margin:8px 0">從施工日誌自動擷取評分依據</div><p class="k">貼上日誌文字，AI 將自動對照評分規章抓出原文與理由。點擊「採用」才會寫入系統計分。</p><div class="row" style="flex-wrap:wrap"><div class="chips" style="margin:0">'+dchip('b','套用到施工前')+dchip('a','套用到施工後')+'</div><div class="chips" style="margin:0"><button onclick="S.doc=DOC0;S.docRes=null;draw()">載入示範日誌</button><button onclick="this.nextElementSibling.click()">上傳 .txt</button><input type="file" accept=".txt,text/plain" hidden onchange="upTxt(this)"></div></div><textarea placeholder="在此貼上施工日誌內容…" oninput="S.doc=this.value">'+esc(S.doc)+'</textarea><div style="margin-top:12px"><button class="btn go"'+dis+' onclick="docRun()">'+(bs('doc')?'AI 判讀中…':'開始 AI 檔案判讀')+'</button></div>';
+h+='<div class="c"><div class="row"><span class="k">① 佐證文件智慧判讀</span><span class="tag">Gemini AI</span></div><div class="hd" style="font-size:20px;margin:8px 0">從施工日誌自動擷取評分依據</div><p class="k">貼上日誌文字，AI 將自動對照評分規章抓出原文與理由。</p><div class="row" style="flex-wrap:wrap"><div class="chips" style="margin:0">'+dchip('b','套用到施工前')+dchip('a','套用到施工後')+'</div><div class="chips" style="margin:0"><button onclick="S.doc=DOC0;S.docRes=null;draw()">載入示範日誌</button><button onclick="this.nextElementSibling.click()">上傳 .txt</button><input type="file" accept=".txt,text/plain" hidden onchange="upTxt(this)"></div></div><textarea placeholder="在此貼上施工日誌內容…" oninput="S.doc=this.value">'+esc(S.doc)+'</textarea><div style="margin-top:12px"><button class="btn go"'+dis+' onclick="docRun()">'+(bs('doc')?'AI 判讀中…':'開始 AI 檔案判讀')+'</button></div>';
 h+=(S.docRes||[]).map((it,i)=>{const x=IND.find(z=>z.k===it.k);return'<div class="ev"><div class="row"><b>'+x.n+'：建議 '+it.score+' 分</b><span class="pill '+(it.ok?'lo':'hi')+'">'+(it.ok?'原文核對無誤':'原文不符')+'</span></div><div class="k">'+esc(it.reason)+'</div><blockquote>「'+esc(it.quote)+'」</blockquote>'+(it.ok?(it.done?'<span class="pill gy">已採用</span>':'<button class="btn go" style="padding:6px 14px;font-size:12px;" onclick="adopt('+i+')">採用至'+(S.docStage==='b'?'施工前':'施工後')+'</button>'):'<span class="k">無法核對</span>')+'</div>'}).join('');
-h+='</div><div class="c" style="margin-top:16px"><div class="row"><span class="k">② 遙測影像 AI 交叉比對</span><span>'+(S.isDemo?'<span class="pill mi">示範影像</span> ':'')+'<span class="tag">Gemini AI</span></span></div><div class="hd" style="font-size:20px;margin:8px 0">防漂綠與衛星影像驗證</div><p class="k">上傳前後空拍影像，AI 與 HSV 色彩空間同步進行覆蓋率交叉驗證。</p>'+imgPanel()+'<div style="margin-top:16px"><button class="btn go"'+dis+' onclick="imgRun()">'+(bs('img')?'影像分析中…':'執行 Gemini 影像驗證')+'</button></div></div>';
+h+='</div><div class="c" style="margin-top:16px"><div class="row"><span class="k">② 遙測影像 AI 交叉比對</span><span>'+(S.isDemo?'<span class="pill mi">示範影像</span> ':'')+'<span class="tag">Gemini AI</span></span></div><div class="hd" style="font-size:20px;margin:8px 0">防漂綠與衛星影像驗證</div>'+imgPanel()+'<div style="margin-top:16px"><button class="btn go"'+dis+' onclick="imgRun()">'+(bs('img')?'影像分析中…':'執行 Gemini 影像驗證')+'</button></div></div>';
 h+='<div class="c" style="margin-top:16px"><div class="row"><span class="k">③ 最佳保費改善路徑試算</span><span class="tag">AI 策略</span></div><div class="hd" style="font-size:20px;margin:8px 0">降級距最少改善組合</div><div class="chips">'+chip('b','從施工前出發')+chip('a','從施工後出發')+'</div>';
-if(sr.m0===1)h+='<div class="rem">目前已達最低 1.0× 最佳費率級距。</div>';else if(!sr.res.length)h+='<div class="rem">僅改動生態指標無法跨越級距，需同步強化社會與治理指標。</div>';else{h+='<div class="c" style="background:var(--seg)">Q 評分 '+f(sr.q0)+'、目前倍數 '+f(sr.m0,1)+'×</div>';sr.res.forEach((r,i)=>{h+='<div class="path"><b style="font-size:18px;color:var(--accent)">'+(i+1)+'</b>'+IND.filter(x=>r.sc[x.k]!==cur[x.k]).map(x=>'<span class="t">'+x.n+' '+cur[x.k]+'→'+r.sc[x.k]+'</span>').join('')+'<b class="r">S '+f(r.s)+' · Q '+f(r.q)+'<div class="k">'+f(r.m,1)+'× · 年保費 '+f(S.L*S.rate/100*r.m,1)+' 萬</div></b></div>'})}
+if(sr.m0===1)h+='<div class="rem">目前已達最低 1.0× 最佳費率級距。</div>';else if(!sr.res.length)h+='<div class="rem">僅改動生態指標無法跨越級距。</div>';else{h+='<div class="c" style="background:var(--seg)">Q 評分 '+f(sr.q0)+'、目前倍數 '+f(sr.m0,1)+'×</div>';sr.res.forEach((r,i)=>{h+='<div class="path"><b style="font-size:18px;color:var(--accent)">'+(i+1)+'</b>'+IND.filter(x=>r.sc[x.k]!==cur[x.k]).map(x=>'<span class="t">'+x.n+' '+cur[x.k]+'→'+r.sc[x.k]+'</span>').join('')+'<b class="r">S '+f(r.s)+' · Q '+f(r.q)+'<div class="k">'+f(r.m,1)+'× · 年保費 '+f(S.L*S.rate/100*r.m,1)+' 萬</div></b></div>'})}
 h+='<button class="btn go"'+dis+' style="margin-top:12px" onclick="planRun()">'+(bs('plan')?'轉換中…':'AI 轉化為現場白話建議')+'</button>'+(S.plain?'<div class="ev"><span class="tag">AI 白話白話建議</span><p>'+esc(S.plain).replace(/\n/g,'<br>')+'</p></div>':'')+'</div>';
 h+='<div class="c" style="margin-top:16px"><div class="row"><span class="k">④ TNFD 自然風險揭露草稿</span><span class="tag">AI 生成</span></div><div class="hd" style="font-size:20px;margin:8px 0">依 LEAP 架構自動生成揭露文本</div><button class="btn go"'+dis+' onclick="tnfdRun()">'+(bs('tnfd')?'草擬中…':'生成 TNFD 揭露報告')+'</button>'+(S.tnfd?'<textarea style="min-height:220px;margin-top:12px" oninput="S.tnfd=this.value">'+esc(S.tnfd)+'</textarea>':'')+'</div>';return h}
 
@@ -434,7 +490,7 @@ if(e.dataset.o==='ins')S.cl=-1;if(e.dataset.o==='S'&&e.dataset.k==='L')S.ins.L=S
 function dl(t,n,m){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click()}
 $('#expJ').onclick=()=>dl(JSON.stringify({state:S,before:prem('b'),after:prem('a'),claim:claim(S.ins)},null,2),'aidc.json','application/json');
 $('#expC').onclick=()=>{const b=prem('b'),a=prem('a'),c=claim(S.ins);
-dl('\uFEFF階段,S,Q,倍數,年保費(萬)\n施工前,'+f(b.s)+','+f(b.q)+','+b.m+','+f(b.p)+'\n施工後,'+f(a.s)+','+f(a.q)+','+a.m+','+f(a.p)+'\n保險給付I,'+c.I+',U,'+c.U+',G,'+c.G,'aidc.csv','text/csv;charset=utf-8')};
+dl('\uFEFF階段,S,Q,倍數,年保費(萬)\n施工前,'+f(b.s)+','+f(b.q)+','+b.m+','+f(b.p)+','+f(b.p)+'\n施工後,'+f(a.s)+','+f(a.q)+','+a.m+','+f(a.p)+'\n保險給付I,'+c.I+',U,'+c.U+',G,'+c.G,'aidc.csv','text/csv;charset=utf-8')};
 draw();setDemo();
 </script>
 </body>
